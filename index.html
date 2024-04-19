@@ -9,13 +9,13 @@
 <body>
     <div class="container">
         <h1>Estado de Tareas en Terreno</h1>
-        <div class="section">
-            <h2>Camiones en Espera</h2>
-            <div id="waitingList"></div>
+        <div class="task">
+            <h2>Camión en Espera</h2>
+            <button onclick="moveToAttending()">Atendiendo Camión</button>
         </div>
-        <div class="section">
-            <h2>Camiones en Atención</h2>
-            <div id="attendingList"></div>
+        <div class="task">
+            <h2>Camión Atendido</h2>
+            <button onclick="moveToReady()">Camión Listo de Alta</button>
         </div>
     </div>
     <script src="script.js"></script>
