@@ -1,22 +1,9 @@
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+function moveToAttending() {
+    // Aquí puedes agregar la lógica para mover el camión a "Atendiendo"
+    console.log("Camión movido a estado 'Atendiendo'");
 }
 
-.task {
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
+function moveToReady() {
+    // Aquí puedes agregar la lógica para mover el camión a "Listo de Alta"
+    console.log("Camión movido a estado 'Listo de Alta'");
 }
