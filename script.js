@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function() {
     formAgregarCamion.addEventListener("submit", function(event) {
         event.preventDefault();
         const patente = document.getElementById("patente").value;
-        agregarCamion(patente);
+        const serieMIOT = document.getElementById("serieMIOT").value;
+        const sensorLevante = document.getElementById("sensorLevante").value;
+        agregarCamion(patente, serieMIOT, sensorLevante);
         formAgregarCamion.reset();
     });
 });
@@ -15,10 +17,10 @@ function cargarCamiones() {
     // Se mantiene igual como en el ejemplo anterior
 }
 
-function agregarCamion(patente) {
-    // Aquí puedes enviar el número de patente al backend para agregar el camión a la base de datos
+function agregarCamion(patente, serieMIOT, sensorLevante) {
+    // Aquí puedes enviar los datos del camión al backend para agregarlo a la base de datos
     // O puedes agregarlo localmente si prefieres manejar los datos del lado del cliente
-    const nuevoCamion = { patente: patente, serieMIOT: "", sensorLevante: "", estado: "en espera", horaIngreso: obtenerHoraActual(), horaSalida: null };
+    const nuevoCamion = { patente: patente, serieMIOT: serieMIOT, sensorLevante: sensorLevante, estado: "en espera", horaIngreso: obtenerHoraActual(), horaSalida: null };
 
     // Crear elemento de camión y añadirlo a la lista
     const camionesContainer = document.getElementById("camiones");
