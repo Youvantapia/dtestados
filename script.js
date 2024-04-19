@@ -42,3 +42,6 @@ function obtenerHoraActual() {
     return `${hora}:${minutos}`;
 }
 
+function verCamionesEspera() {
+    window.location.href = "camiones_espera.html";
+}
