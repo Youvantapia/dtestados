@@ -26,6 +26,9 @@ function agregarCamion(patente, serieMIOT, sensorLevante) {
     const camionesContainer = document.getElementById("camiones");
     const camionElement = document.createElement("div");
     camionElement.classList.add("camion");
+    if (nuevoCamion.estado === "atendiendo") {
+        camionElement.classList.add("atendiendo");
+    }
     camionElement.innerHTML = `
         <h2>Camión ${nuevoCamion.patente}</h2>
         <p><strong>Serie MIOT:</strong> ${nuevoCamion.serieMIOT}</p>
@@ -51,4 +54,5 @@ function atenderCamion(patente) {
     const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
     const estadoElement = camionElement.querySelector("p:nth-of-type(3)");
     estadoElement.textContent = "atendiendo";
+    camionElement.classList.add("atendiendo");
 }
