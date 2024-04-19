@@ -4,21 +4,19 @@
     text-align: center;
 }
 
-.section {
-    margin-bottom: 40px;
-}
-
 .task {
     margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
 }
 
-.attending {
-    background-color: #ffc107;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
 }
 
-.ready {
-    background-color: #28a745;
+button:hover {
+    background-color: #0056b3;
 }
