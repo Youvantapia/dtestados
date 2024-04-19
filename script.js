@@ -1,28 +1,44 @@
 document.addEventListener("DOMContentLoaded", function() {
     cargarCamiones();
+
+    const formAgregarCamion = document.getElementById("formAgregarCamion");
+    formAgregarCamion.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const patente = document.getElementById("patente").value;
+        agregarCamion(patente);
+        formAgregarCamion.reset();
+    });
 });
 
 function cargarCamiones() {
-    // Aquí puedes hacer una solicitud al backend para obtener el estado de los camiones
-    // En este ejemplo, vamos a crear algunos camiones de muestra
-    const camiones = [
-        { patente: "ABC123", serieMIOT: "123456", sensorLevante: "789", estado: "en espera", horaIngreso: "10:00", horaSalida: null },
-        { patente: "DEF456", serieMIOT: "789012", sensorLevante: "345", estado: "atendiendo", horaIngreso: "10:30", horaSalida: null },
-        { patente: "GHI789", serieMIOT: "345678", sensorLevante: "901", estado: "listo", horaIngreso: "11:00", horaSalida: "12:00" }
-    ];
-
-    const camionesContainer = document.getElementById("camiones");
-    camiones.forEach(camion => {
-        const camionElement = document.createElement("div");
-        camionElement.classList.add("camion");
-        camionElement.innerHTML = `
-            <h2>Camión ${camion.patente}</h2>
-            <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
-            <p><strong>Sensor de Levante:</strong> ${camion.sensorLevante}</p>
-            <p><strong>Estado:</strong> ${camion.estado}</p>
-            <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
-            <p class="hora"><strong>Hora de Salida:</strong> ${camion.horaSalida ? camion.horaSalida : '---'}</p>
-        `;
-        camionesContainer.appendChild(camionElement);
-    });
+    // Código para cargar los camiones desde el backend o generarlos localmente
+    // Se mantiene igual como en el ejemplo anterior
 }
+
+function agregarCamion(patente) {
+    // Aquí puedes enviar el número de patente al backend para agregar el camión a la base de datos
+    // O puedes agregarlo localmente si prefieres manejar los datos del lado del cliente
+    const nuevoCamion = { patente: patente, serieMIOT: "", sensorLevante: "", estado: "en espera", horaIngreso: obtenerHoraActual(), horaSalida: null };
+
+    // Crear elemento de camión y añadirlo a la lista
+    const camionesContainer = document.getElementById("camiones");
+    const camionElement = document.createElement("div");
+    camionElement.classList.add("camion");
+    camionElement.innerHTML = `
+        <h2>Camión ${nuevoCamion.patente}</h2>
+        <p><strong>Serie MIOT:</strong> ${nuevoCamion.serieMIOT}</p>
+        <p><strong>Sensor de Levante:</strong> ${nuevoCamion.sensorLevante}</p>
+        <p><strong>Estado:</strong> ${nuevoCamion.estado}</p>
+        <p class="hora"><strong>Hora de Ingreso:</strong> ${nuevoCamion.horaIngreso}</p>
+        <p class="hora"><strong>Hora de Salida:</strong> ${nuevoCamion.horaSalida ? nuevoCamion.horaSalida : '---'}</p>
+    `;
+    camionesContainer.appendChild(camionElement);
+}
+
+function obtenerHoraActual() {
+    const ahora = new Date();
+    const hora = ahora.getHours().toString().padStart(2, "0");
+    const minutos = ahora.getMinutes().toString().padStart(2, "0");
+    return `${hora}:${minutos}`;
+}
+
