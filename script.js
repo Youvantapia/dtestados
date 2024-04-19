@@ -33,6 +33,7 @@ function agregarCamion(patente, serieMIOT, sensorLevante) {
         <p><strong>Estado:</strong> ${nuevoCamion.estado}</p>
         <p class="hora"><strong>Hora de Ingreso:</strong> ${nuevoCamion.horaIngreso}</p>
         <p class="hora"><strong>Hora de Salida:</strong> ${nuevoCamion.horaSalida ? nuevoCamion.horaSalida : '---'}</p>
+        <button onclick="atenderCamion('${nuevoCamion.patente}')">Atender Camión</button>
     `;
     camionesContainer.appendChild(camionElement);
 }
@@ -44,6 +45,10 @@ function obtenerHoraActual() {
     return `${hora}:${minutos}`;
 }
 
-function verCamionesEspera() {
-    window.location.href = "camiones_espera.html";
+function atenderCamion(patente) {
+    // Aquí puedes enviar una solicitud al backend para cambiar el estado del camión a "atendiendo"
+    // O puedes actualizar el estado del camión localmente si prefieres manejar los datos del lado del cliente
+    const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
+    const estadoElement = camionElement.querySelector("p:nth-of-type(3)");
+    estadoElement.textContent = "atendiendo";
 }
