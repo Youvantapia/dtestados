@@ -33,7 +33,7 @@ function agregarCamion(patente, serieMIOT, sensorLevante) {
         <h2>Camión ${nuevoCamion.patente}</h2>
         <p><strong>Serie MIOT:</strong> ${nuevoCamion.serieMIOT}</p>
         <p><strong>Sensor de Levante:</strong> ${nuevoCamion.sensorLevante}</p>
-        <p><strong>Estado:</strong> ${nuevoCamion.estado}</p>
+        <p class="estado"><strong>Estado:</strong> ${nuevoCamion.estado}</p>
         <p class="hora"><strong>Hora de Ingreso:</strong> ${nuevoCamion.horaIngreso}</p>
         <p class="hora"><strong>Hora de Salida:</strong> ${nuevoCamion.horaSalida ? nuevoCamion.horaSalida : '---'}</p>
         <button onclick="atenderCamion('${nuevoCamion.patente}')">Atender Camión</button>
@@ -52,7 +52,7 @@ function atenderCamion(patente) {
     // Aquí puedes enviar una solicitud al backend para cambiar el estado del camión a "atendiendo"
     // O puedes actualizar el estado del camión localmente si prefieres manejar los datos del lado del cliente
     const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
-    const estadoElement = camionElement.querySelector("p:nth-of-type(3)");
-    estadoElement.textContent = "atendiendo";
+    const estadoElement = camionElement.querySelector(".estado");
+    estadoElement.textContent = "Atendiendo";
     camionElement.classList.add("atendiendo");
 }
