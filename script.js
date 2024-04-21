@@ -1,3 +1,5 @@
+let camionesAtendidos = [];
+
 document.addEventListener("DOMContentLoaded", function() {
     cargarCamiones();
 
@@ -55,4 +57,49 @@ function atenderCamion(patente) {
     const estadoElement = camionElement.querySelector(".estado");
     estadoElement.textContent = "Atendiendo";
     camionElement.classList.add("atendiendo");
+    // Mover el camión a la lista de camiones atendidos
+    const camionIndex = camiones.findIndex(camion => camion.patente === patente);
+    camionesAtendidos.push(camiones.splice(camionIndex, 1)[0]);
+}
+
+function verCamionesListos() {
+    const camionesContainer = document.getElementById("camiones");
+    camionesContainer.innerHTML = "";
+
+    camionesAtendidos.forEach(camion => {
+        const camionElement = document.createElement("div");
+        camionElement.classList.add("camion");
+        camionElement.innerHTML = `
+            <h2>Camión ${camion.patente}</h2>
+            <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
+            <p><strong>Sensor de Levante:</strong> ${camion.sensorLevante}</p>
+            <p class="estado"><strong>Estado:</strong> Listo</p>
+            <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
+            <p class="hora"><strong>Hora de Salida:</strong> ${camion.horaSalida ? camion.horaSalida : '---'}</p>
+        `;
+        camionesContainer.appendChild(camionElement);
+    });
+}
+
+function verCamionesEspera() {
+    const camionesContainer = document.getElementById("camiones");
+    camionesContainer.innerHTML = "";
+
+    camiones.forEach(camion => {
+        const camionElement = document.createElement("div");
+        camionElement.classList.add("camion");
+        if (camion.estado === "atendiendo") {
+            camionElement.classList.add("atendiendo");
+        }
+        camionElement.innerHTML = `
+            <h2>Camión ${camion.patente}</h2>
+            <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
+            <p><strong>Sensor de Levante:</strong> ${camion.sensorLevante}</p>
+            <p class="estado"><strong>Estado:</strong> ${camion.estado}</p>
+            <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
+            <p class="hora"><strong>Hora de Salida:</strong> ${camion.horaSalida ? camion.horaSalida : '---'}</p>
+            <button onclick="atenderCamion('${camion.patente}')">Atender Camión</button>
+        `;
+        camionesContainer.appendChild(camionElement);
+    });
 }
