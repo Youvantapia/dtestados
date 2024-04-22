@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function cargarPatentes() {
-    fetch("/patentes")
+    fetch("https://raw.githubusercontent.com/TU_USUARIO/registro-patentes/main/patentes.json")
         .then(response => response.json())
         .then(data => {
             patentes = data;
@@ -21,16 +21,32 @@ function cargarPatentes() {
 }
 
 function agregarPatente(patente) {
-    fetch("/patentes", {
-        method: "POST",
+    fetch("https://raw.githubusercontent.com/TU_USUARIO/registro-patentes/main/patentes.json", {
+        method: "GET",
         headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ patente: patente })
+        }
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data.message);
+            patentes = data;
+            patentes.push({ patente: patente, horaIngreso: obtenerHoraActual() });
+            return fetch("https://api.github.com/repos/TU_USUARIO/registro-patentes/contents/patentes.json", {
+                method: "PUT",
+                headers: {
+                    "Authorization": "Bearer TU_TOKEN_DE_ACCESO",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "message": "Agregada nueva patente",
+                    "content": btoa(JSON.stringify(patentes)),
+                    "sha": data.sha
+                })
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
             cargarPatentes();
         })
         .catch(error => console.error("Error al agregar la patente:", error));
@@ -44,4 +60,14 @@ function mostrarPatentes() {
         patenteItem.textContent = `${patente.patente} - Ingreso: ${patente.horaIngreso}`;
         patentesList.appendChild(patenteItem);
     });
+}
+
+function obtenerHoraActual() {
+    const ahora = new Date();
+    const dia = ahora.getDate().toString().padStart(2, "0");
+    const mes = (ahora.getMonth() + 1).toString().padStart(2, "0");
+    const año = ahora.getFullYear();
+    const hora = ahora.getHours().toString().padStart(2, "0");
+    const minutos = ahora.getMinutes().toString().padStart(2, "0");
+    return `${dia}/${mes}/${año} ${hora}:${minutos}`;
 }
