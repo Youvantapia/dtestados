@@ -1,5 +1,3 @@
-let patentes = [];
-
 document.addEventListener("DOMContentLoaded", function() {
     cargarPatentes();
 
@@ -13,28 +11,29 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function cargarPatentes() {
-    // Cargar patentes desde el almacenamiento local
-    const patentesGuardadas = JSON.parse(localStorage.getItem("patentes"));
-    if (patentesGuardadas) {
-        patentes = patentesGuardadas;
-        mostrarPatentes();
-    }
+    fetch("/patentes")
+        .then(response => response.json())
+        .then(data => {
+            patentes = data;
+            mostrarPatentes();
+        })
+        .catch(error => console.error("Error al cargar las patentes:", error));
 }
 
 function agregarPatente(patente) {
-    patentes.push({ patente: patente, horaIngreso: obtenerHoraActual() });
-    localStorage.setItem("patentes", JSON.stringify(patentes));
-    mostrarPatentes();
-}
-
-function obtenerHoraActual() {
-    const ahora = new Date();
-    const dia = ahora.getDate().toString().padStart(2, "0");
-    const mes = (ahora.getMonth() + 1).toString().padStart(2, "0");
-    const año = ahora.getFullYear();
-    const hora = ahora.getHours().toString().padStart(2, "0");
-    const minutos = ahora.getMinutes().toString().padStart(2, "0");
-    return `${dia}/${mes}/${año} ${hora}:${minutos}`;
+    fetch("/patentes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ patente: patente })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            cargarPatentes();
+        })
+        .catch(error => console.error("Error al agregar la patente:", error));
 }
 
 function mostrarPatentes() {
