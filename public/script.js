@@ -1,4 +1,4 @@
-// Datos simulados
+// Datos de las patentes
 let patentes = [];
 
 // Cargar las patentes guardadas
@@ -9,7 +9,7 @@ fetch('data/patentes.json')
     actualizarPatentes();
   });
 
-// Función para guardar patente
+// Función para guardar una patente
 function guardarPatente() {
     const patenteInput = document.getElementById("patenteInput");
     const patente = patenteInput.value.toUpperCase();
