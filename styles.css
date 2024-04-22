@@ -1,26 +1,50 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
     text-align: center;
 }
 
-.camion {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+h1 {
+    color: #333;
 }
 
-.camion h2 {
-    margin-top: 0;
+form {
+    margin-bottom: 20px;
 }
 
-.camion .hora {
-    font-style: italic;
-    font-size: 0.8em;
-    color: #666;
+label {
+    margin-right: 5px;
+}
+
+input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 5px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 5px;
+    font-size: 18px;
 }
