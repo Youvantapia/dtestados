@@ -1,24 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Patentes</title>
+    <title>Gestor de Patentes de Camiones</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h1>Gestor de Patentes de Camiones</h1>
     <div class="container">
-        <h1>Registro de Patentes</h1>
-        <form id="formAgregarPatente">
-            <label for="patente">Número de Patente:</label>
-            <input type="text" id="patente" name="patente" required>
-            <button type="submit">Agregar Patente</button>
-        </form>
-        <h2>Patentes Ingresadas:</h2>
-        <ul id="patentesList">
-            <!-- Lista de patentes ingresadas -->
-        </ul>
+        <div class="form">
+            <h2>Ingresar Patente</h2>
+            <input type="text" id="patenteInput" placeholder="Ingrese la patente del camión">
+            <button onclick="guardarPatente()">Guardar</button>
+        </div>
+        <div class="patentes">
+            <h2>Patentes Ingresadas</h2>
+            <ul id="patentesList"></ul>
+        </div>
+        <div class="patentes-en-espera">
+            <h2>Patentes en Espera</h2>
+            <ul id="patentesEsperaList"></ul>
+        </div>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
