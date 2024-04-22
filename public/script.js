@@ -19,9 +19,8 @@ function guardarPatente() {
             estado: "en espera"
         });
         patenteInput.value = "";
-        actualizarPatentes();
-        // Guardar las patentes actualizadas
         guardarPatentesEnArchivo();
+        actualizarPatentes();
     }
 }
 
