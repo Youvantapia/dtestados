@@ -1,73 +1,47 @@
-document.addEventListener("DOMContentLoaded", function() {
-    cargarPatentes();
+// Configura tu Firebase
+var firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_AUTH_DOMAIN",
+    projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_STORAGE_BUCKET",
+    messagingSenderId: "TU_MESSAGING_SENDER_ID",
+    appId: "TU_APP_ID",
+    measurementId: "TU_MEASUREMENT_ID"
+};
+// Inicializa Firebase
+firebase.initializeApp(firebaseConfig);
 
-    const formAgregarPatente = document.getElementById("formAgregarPatente");
-    formAgregarPatente.addEventListener("submit", function(event) {
-        event.preventDefault();
-        const patente = document.getElementById("patente").value;
-        agregarPatente(patente);
-        formAgregarPatente.reset();
+const database = firebase.database();
+const patentesRef = database.ref("patentes");
+
+// Guardar patente
+function guardarPatente() {
+    const patenteInput = document.getElementById("patenteInput");
+    const patente = patenteInput.value.toUpperCase();
+    if (patente !== "") {
+        patentesRef.push({
+            patente: patente,
+            estado: "en espera"
+        });
+        patenteInput.value = "";
+    }
+}
+
+// Mostrar patentes
+patentesRef.on("value", function(snapshot) {
+    const patentesList = document.getElementById("patentesList");
+    const patentesEsperaList = document.getElementById("patentesEsperaList");
+    patentesList.innerHTML = "";
+    patentesEsperaList.innerHTML = "";
+    snapshot.forEach(function(childSnapshot) {
+        const patente = childSnapshot.val().patente;
+        const estado = childSnapshot.val().estado;
+        const li = document.createElement("li");
+        li.textContent = patente;
+        if (estado === "en espera") {
+            patentesEsperaList.appendChild(li);
+        } else {
+            patentesList.appendChild(li);
+        }
     });
 });
-
-function cargarPatentes() {
-    fetch("https://raw.githubusercontent.com/Youvantapia/registro-patentes/main/patentes.json")
-        .then(response => response.json())
-        .then(data => {
-            patentes = data;
-            mostrarPatentes();
-        })
-        .catch(error => console.error("Error al cargar las patentes:", error));
-}
-
-function agregarPatente(patente) {
-    fetch("https://raw.githubusercontent.com/Youvantapia/registro-patentes/main/patentes.json", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            patentes = data;
-            patentes.push({ patente: patente, horaIngreso: obtenerHoraActual() });
-            return fetch("https://api.github.com/repos/Youvantapia/registro-patentes/contents/patentes.json", {
-                method: "PUT",
-                headers: {
-                    "Authorization": "Bearer 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",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    "message": "Agregada nueva patente",
-                    "content": btoa(JSON.stringify(patentes)),
-                    "sha": data.sha
-                })
-            });
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            cargarPatentes();
-        })
-        .catch(error => console.error("Error al agregar la patente:", error));
-}
-
-function mostrarPatentes() {
-    const patentesList = document.getElementById("patentesList");
-    patentesList.innerHTML = "";
-    patentes.forEach(patente => {
-        const patenteItem = document.createElement("li");
-        patenteItem.textContent = `${patente.patente} - Ingreso: ${patente.horaIngreso}`;
-        patentesList.appendChild(patenteItem);
-    });
-}
-
-function obtenerHoraActual() {
-    const ahora = new Date();
-    const dia = ahora.getDate().toString().padStart(2, "0");
-    const mes = (ahora.getMonth() + 1).toString().padStart(2, "0");
-    const año = ahora.getFullYear();
-    const hora = ahora.getHours().toString().padStart(2, "0");
-    const minutos = ahora.getMinutes().toString().padStart(2, "0");
-    return `${dia}/${mes}/${año} ${hora}:${minutos}`;
-}
