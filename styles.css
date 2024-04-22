@@ -24,8 +24,3 @@ body {
     font-size: 0.8em;
     color: #666;
 }
-
-.camion.atendiendo {
-    border-color: orange;
-    box-shadow: 0 0 5px orange;
-}
