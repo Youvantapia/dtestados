@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function cargarPatentes() {
-    fetch("https://raw.githubusercontent.com/TU_USUARIO/registro-patentes/main/patentes.json")
+    fetch("https://raw.githubusercontent.com/Youvantapia/registro-patentes/main/patentes.json")
         .then(response => response.json())
         .then(data => {
             patentes = data;
@@ -21,7 +21,7 @@ function cargarPatentes() {
 }
 
 function agregarPatente(patente) {
-    fetch("https://raw.githubusercontent.com/TU_USUARIO/registro-patentes/main/patentes.json", {
+    fetch("https://raw.githubusercontent.com/Youvantapia/registro-patentes/main/patentes.json", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -31,10 +31,10 @@ function agregarPatente(patente) {
         .then(data => {
             patentes = data;
             patentes.push({ patente: patente, horaIngreso: obtenerHoraActual() });
-            return fetch("https://api.github.com/repos/TU_USUARIO/registro-patentes/contents/patentes.json", {
+            return fetch("https://api.github.com/repos/Youvantapia/registro-patentes/contents/patentes.json", {
                 method: "PUT",
                 headers: {
-                    "Authorization": "Bearer TU_TOKEN_DE_ACCESO",
+                    "Authorization": "Bearer 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",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
