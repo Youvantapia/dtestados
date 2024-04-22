@@ -1,4 +1,6 @@
-let camionesAtendidos = [];
+let camiones = [];
+let camionesEnRevision = [];
+let camionesFinalizados = [];
 
 document.addEventListener("DOMContentLoaded", function() {
     cargarCamiones();
@@ -15,91 +17,119 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function cargarCamiones() {
-    // Código para cargar los camiones desde el backend o generarlos localmente
-    // Se mantiene igual como en el ejemplo anterior
+    // Puedes cargar los camiones desde un almacenamiento local, base de datos o cualquier otro lugar
+
+    // Ejemplo de camiones precargados
+    agregarCamion("ABC123", "123456", "A1");
+    agregarCamion("DEF456", "789012", "B2");
 }
 
 function agregarCamion(patente, serieMIOT, sensorLevante) {
-    // Aquí puedes enviar los datos del camión al backend para agregarlo a la base de datos
-    // O puedes agregarlo localmente si prefieres manejar los datos del lado del cliente
-    const nuevoCamion = { patente: patente, serieMIOT: serieMIOT, sensorLevante: sensorLevante, estado: "en espera", horaIngreso: obtenerHoraActual(), horaSalida: null };
+    const nuevoCamion = { 
+        patente: patente, 
+        serieMIOT: serieMIOT, 
+        sensorLevante: sensorLevante, 
+        estado: "en espera", 
+        horaIngreso: obtenerHoraActual(), 
+        horaRevision: null,
+        horaFinalizado: null
+    };
 
-    // Crear elemento de camión y añadirlo a la lista
-    const camionesContainer = document.getElementById("camiones");
-    const camionElement = document.createElement("div");
-    camionElement.classList.add("camion");
-    if (nuevoCamion.estado === "atendiendo") {
-        camionElement.classList.add("atendiendo");
-    }
-    camionElement.innerHTML = `
-        <h2>Camión ${nuevoCamion.patente}</h2>
-        <p><strong>Serie MIOT:</strong> ${nuevoCamion.serieMIOT}</p>
-        <p><strong>Sensor de Levante:</strong> ${nuevoCamion.sensorLevante}</p>
-        <p class="estado"><strong>Estado:</strong> ${nuevoCamion.estado}</p>
-        <p class="hora"><strong>Hora de Ingreso:</strong> ${nuevoCamion.horaIngreso}</p>
-        <p class="hora"><strong>Hora de Salida:</strong> ${nuevoCamion.horaSalida ? nuevoCamion.horaSalida : '---'}</p>
-        <button onclick="atenderCamion('${nuevoCamion.patente}')">Atender Camión</button>
-    `;
-    camionesContainer.appendChild(camionElement);
+    camiones.push(nuevoCamion);
+    mostrarCamion(nuevoCamion);
 }
 
 function obtenerHoraActual() {
     const ahora = new Date();
     const hora = ahora.getHours().toString().padStart(2, "0");
     const minutos = ahora.getMinutes().toString().padStart(2, "0");
-    return `${hora}:${minutos}`;
+    const dia = ahora.getDate().toString().padStart(2, "0");
+    const mes = (ahora.getMonth() + 1).toString().padStart(2, "0");
+    const año = ahora.getFullYear();
+    return `${dia}/${mes}/${año} ${hora}:${minutos}`;
 }
 
-function atenderCamion(patente) {
-    // Aquí puedes enviar una solicitud al backend para cambiar el estado del camión a "atendiendo"
-    // O puedes actualizar el estado del camión localmente si prefieres manejar los datos del lado del cliente
-    const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
-    const estadoElement = camionElement.querySelector(".estado");
-    estadoElement.textContent = "Atendiendo";
-    camionElement.classList.add("atendiendo");
-    // Mover el camión a la lista de camiones atendidos
-    const camionIndex = camiones.findIndex(camion => camion.patente === patente);
-    camionesAtendidos.push(camiones.splice(camionIndex, 1)[0]);
-}
-
-function verCamionesListos() {
+function mostrarCamion(camion) {
     const camionesContainer = document.getElementById("camiones");
-    camionesContainer.innerHTML = "";
+    const camionElement = document.createElement("div");
+    camionElement.classList.add("camion");
+    camionElement.innerHTML = `
+        <h2>Camión ${camion.patente}</h2>
+        <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
+        <p><strong>Número de Chip:</strong> ${camion.sensorLevante}</p>
+        <p class="estado"><strong>Estado:</strong> ${camion.estado}</p>
+        <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
+        <button onclick="cambiarEstadoRevision('${camion.patente}')">Cambiar a Revisión</button>
+    `;
+    camionesContainer.appendChild(camionElement);
+}
 
-    camionesAtendidos.forEach(camion => {
-        const camionElement = document.createElement("div");
-        camionElement.classList.add("camion");
-        camionElement.innerHTML = `
-            <h2>Camión ${camion.patente}</h2>
-            <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
-            <p><strong>Sensor de Levante:</strong> ${camion.sensorLevante}</p>
-            <p class="estado"><strong>Estado:</strong> Listo</p>
-            <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
-            <p class="hora"><strong>Hora de Salida:</strong> ${camion.horaSalida ? camion.horaSalida : '---'}</p>
-        `;
-        camionesContainer.appendChild(camionElement);
-    });
+function cambiarEstadoRevision(patente) {
+    const camion = camiones.find(c => c.patente === patente);
+    if (camion) {
+        camion.estado = "en revisión";
+        camion.horaRevision = obtenerHoraActual();
+        const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
+        const estadoElement = camionElement.querySelector(".estado");
+        const horaElement = camionElement.querySelector(".hora");
+        estadoElement.textContent = "en revisión";
+        horaElement.innerHTML = `<strong>Hora de Revisión:</strong> ${camion.horaRevision}`;
+        camionesEnRevision.push(camiones.splice(camiones.indexOf(camion), 1)[0]);
+        actualizarCamiones();
+    }
+}
+
+function cambiarEstadoFinalizado(patente) {
+    const camion = camionesEnRevision.find(c => c.patente === patente);
+    if (camion) {
+        camion.estado = "finalizado";
+        camion.horaFinalizado = obtenerHoraActual();
+        const camionElement = document.querySelector(`.camion h2:contains(${patente})`).parentNode;
+        const estadoElement = camionElement.querySelector(".estado");
+        const horaElement = camionElement.querySelector(".hora");
+        estadoElement.textContent = "finalizado";
+        horaElement.innerHTML = `<strong>Hora de Finalizado:</strong> ${camion.horaFinalizado}`;
+        camionesFinalizados.push(camionesEnRevision.splice(camionesEnRevision.indexOf(camion), 1)[0]);
+        actualizarCamiones();
+    }
 }
 
 function verCamionesEspera() {
+    mostrarCamiones(camiones);
+}
+
+function verCamionesRevision() {
+    mostrarCamiones(camionesEnRevision);
+}
+
+function verCamionesFinalizados() {
+    mostrarCamiones(camionesFinalizados);
+}
+
+function mostrarCamiones(camionesMostrar) {
     const camionesContainer = document.getElementById("camiones");
     camionesContainer.innerHTML = "";
 
-    camiones.forEach(camion => {
+    camionesMostrar.forEach(camion => {
         const camionElement = document.createElement("div");
         camionElement.classList.add("camion");
-        if (camion.estado === "atendiendo") {
-            camionElement.classList.add("atendiendo");
-        }
         camionElement.innerHTML = `
             <h2>Camión ${camion.patente}</h2>
             <p><strong>Serie MIOT:</strong> ${camion.serieMIOT}</p>
-            <p><strong>Sensor de Levante:</strong> ${camion.sensorLevante}</p>
+            <p><strong>Número de Chip:</strong> ${camion.sensorLevante}</p>
             <p class="estado"><strong>Estado:</strong> ${camion.estado}</p>
             <p class="hora"><strong>Hora de Ingreso:</strong> ${camion.horaIngreso}</p>
-            <p class="hora"><strong>Hora de Salida:</strong> ${camion.horaSalida ? camion.horaSalida : '---'}</p>
-            <button onclick="atenderCamion('${camion.patente}')">Atender Camión</button>
+            ${camion.horaRevision ? `<p class="hora"><strong>Hora de Revisión:</strong> ${camion.horaRevision}</p>` : ''}
+            ${camion.horaFinalizado ? `<p class="hora"><strong>Hora de Finalizado:</strong> ${camion.horaFinalizado}</p>` : ''}
+            ${camion.estado === 'en espera' ? `<button onclick="cambiarEstadoRevision('${camion.patente}')">Cambiar a Revisión</button>` : ''}
+            ${camion.estado === 'en revisión' ? `<button onclick="cambiarEstadoFinalizado('${camion.patente}')">Finalizar</button>` : ''}
         `;
         camionesContainer.appendChild(camionElement);
     });
+}
+
+function actualizarCamiones() {
+    verCamionesEspera();
+    verCamionesRevision();
+    verCamionesFinalizados();
 }
