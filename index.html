@@ -3,27 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estado de Camiones DT</title>
+    <title>Registro de Patentes</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Estado de Camiones</h1>
-        <form id="formAgregarCamion">
+        <h1>Registro de Patentes</h1>
+        <form id="formAgregarPatente">
             <label for="patente">Número de Patente:</label>
             <input type="text" id="patente" name="patente" required>
-            <label for="serieMIOT">Número de Serie MIOT:</label>
-            <input type="text" id="serieMIOT" name="serieMIOT" required>
-            <label for="sensorLevante">Número de Chip:</label>
-            <input type="text" id="sensorLevante" name="sensorLevante" required>
-            <button type="submit">Agregar Camión</button>
+            <button type="submit">Agregar Patente</button>
         </form>
-        <button onclick="verCamionesEspera()">Ver Camiones en Espera</button>
-        <button onclick="verCamionesRevision()">Ver Camiones en Revisión</button>
-        <button onclick="verCamionesFinalizados()">Ver Camiones Finalizados</button>
-        <div id="camiones">
-            <!-- Aquí se mostrarán los camiones -->
-        </div>
+        <h2>Patentes Ingresadas:</h2>
+        <ul id="patentesList">
+            <!-- Lista de patentes ingresadas -->
+        </ul>
     </div>
     <script src="script.js"></script>
 </body>
