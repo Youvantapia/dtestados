@@ -1,12 +1,12 @@
 // Configura tu Firebase
 var firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID",
-    measurementId: "TU_MEASUREMENT_ID"
+    apiKey: "AIzaSyB0GcnzNEVwUyw3iehrFKWUHGSlY1WdVGc",
+    authDomain: "patentesdt.firebaseapp.com",
+    projectId: "patentesdt",
+    storageBucket: "patentesdt.appspot.com",
+    messagingSenderId: "50566108596",
+    appId: "1:50566108596:web:01a3c97cf65e56b8ce8ee1",
+    measurementId: "G-2SYD0R8EZE"
 };
 // Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
